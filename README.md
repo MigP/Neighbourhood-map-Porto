@@ -21,4 +21,4 @@ Simply Clone or Download and open index.html on any browser.
 
 ## License
 
-[MIT License](/blob/master/LICENSE)
+[MIT License](/LICENSE)
