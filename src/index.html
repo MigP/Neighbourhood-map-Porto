@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<!-- Metas -->
+	    <meta charset='utf-8'>
+	    <meta name='description' content='Neighbourhood map - Porto'>
+	    <meta name='author' content='Miguel Pinto'>
+	    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Neighbourhood map - Porto</title>
+    <!-- Styles -->
+    	<link href='css/bootstrap.css' rel='stylesheet'>
+    	<link href='css/basic.css' rel='stylesheet'>
+
+		<style type='text/css'>
+		</style>
+ </head>
+<body>
+	<main class='container-fluid'>
+
+		<!-- Side navigation panel -->
+		<aside id='sideNav' class='sideNav' data-bind='visible: visibleSideNav'>
+			<span title='Close search pannel' class='closebtn' onclick='closeNav()'>&times;</span>
+			<h2>Search Porto</h2>
+			<input id='search_input_box' class='search-box' placeholder='Search ..' type='text' data-bind='value: searchBox, valueUpdate: "keyup"' autofocus>
+			<span class='clear' data-bind='click: clearSearch'>Clear search</span>
+			<h4 class='filter_heading'>
+				<span>Filter by type</span>
+				<span id='arrow' data-bind='click: toggleFilters, text: !hiddenFilters() ? "▼" : "▲", attr: { title: !hiddenFilters() ? "Collapse" : "Expand" }'></span>
+			</h4>
+
+			<!-- Section with all filter checkboxes -->
+			<div class='types' data-bind='css: { "types_hidden": hiddenFilters }, visible: visibleSideNav'>
+				<div class='filter_all'>
+					<button class='btn' data-bind='click: checkAllFilters'>All filters</button>
+					<button class='btn' data-bind='click: uncheckAllFilters'>No filters</button>
+				</div>
+
+			  	<div class="rounded">
+				  	<input id='rounded_1' type='checkbox' data-bind='click: toggleBox($root.architecturalChecked), checked: $root.architecturalChecked'/>
+				  	<label for='rounded_1'></label>
+				</div>
+			  	<img class='icon' src='images/architectural.png' title='Buildings of architectural interest' alt='Buildings of architectural interest'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_2' type='checkbox' data-bind='click: toggleBox($root.stadiumChecked), checked: $root.stadiumChecked'/>
+				  	<label for='rounded_2'></label>
+				</div>
+			  	<img class='icon' src='images/stadium.png' title='Stadiums, sports complexes, etc.' alt='Stadiums, sports complexes, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_3' type='checkbox' data-bind='click: toggleBox($root.foodChecked), checked: $root.foodChecked'/>
+				  	<label for='rounded_3'></label>
+				</div>
+			  	<img class='icon' src='images/food.png' title='Food & drink' alt='Food & drink'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_4' type='checkbox' data-bind='click: toggleBox($root.nightlifeChecked), checked: $root.nightlifeChecked'/>
+				  	<label for='rounded_4'></label>
+				</div>
+			  	<img class='icon' src='images/nightlife.png' title='Night life, bars, clubs, etc.' alt='Night life, bars, clubs, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_5' type='checkbox' data-bind='click: toggleBox($root.zooChecked), checked: $root.zooChecked'/>
+				  	<label for='rounded_5'></label>
+				</div>
+			  	<img class='icon' src='images/zoo.png' title='Zoos, aquariums, wildlife, etc.' alt='Zoos, aquariums, wildlife, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_6' type='checkbox' data-bind='click: toggleBox($root.scenicChecked), checked: $root.scenicChecked'/>
+				  	<label for='rounded_6'></label>
+				</div>
+			  	<img class='icon' src='images/scenic.png' title='Scenic areas, point of interest, lookouts, viewpoints, etc.' alt='Scenic areas, point of interest, lookouts, viewpoints, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_7' type='checkbox' data-bind='click: toggleBox($root.parkChecked), checked: $root.parkChecked'/>
+				  	<label for='rounded_7'></label>
+				</div>
+			  	<img class='icon' src='images/park.png' title='Parks and green spaces' alt='Parks and green spaces'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_8' type='checkbox' data-bind='click: toggleBox($root.churchChecked), checked: $root.churchChecked'/>
+				  	<label for='rounded_8'></label>
+				</div>
+			  	<img class='icon' src='images/church.png' title='Churches, Cathedrals, Chapels, Monasteries, etc.' alt='Churches, Cathedrals, Chapels, Monasteries, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_9' type='checkbox' data-bind='click: toggleBox($root.historicChecked), checked: $root.historicChecked'/>
+				  	<label for='rounded_9'></label>
+				</div>
+			  	<img class='icon' src='images/historic.png' title='Sites of historic interest' alt='Sites of historic interest'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_10' type='checkbox' data-bind='click: toggleBox($root.monumentChecked), checked: $root.monumentChecked'/>
+				  	<label for='rounded_10'></label>
+				</div>
+			  	<img class='icon' src='images/monument.png' title='Monuments and landmarks' alt='Monuments and landmarks'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_11' type='checkbox' data-bind='click: toggleBox($root.museumChecked), checked: $root.museumChecked'/>
+				  	<label for='rounded_11'></label>
+				</div>
+			  	<img class='icon' src='images/museum.png' title='Museums, libraries, galleries, exhibitions, etc.' alt='Museums, libraries, galleries, exhibitions, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_12' type='checkbox' data-bind='click: toggleBox($root.cruiseChecked), checked: $root.cruiseChecked'/>
+				  	<label for='rounded_12'></label>
+				</div>
+			  	<img class='icon' src='images/cruise.png' title='Cruise terminals, sea ports, marinas, etc.' alt='Cruise terminals, sea ports, marinas, etc.'>
+
+		  		<div class="rounded">
+				  	<input id='rounded_13' type='checkbox' data-bind='click: toggleBox($root.beachChecked), checked: $root.beachChecked'/>
+				  	<label for='rounded_13'></label>
+				</div>
+			  	<img class='icon' src='images/beach.png' title='Beaches' alt='Beaches'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_14' type='checkbox'  data-bind='click: toggleBox($root.bridgeChecked), checked: $root.bridgeChecked'/>
+				  	<label for='rounded_14'></label>
+				</div>
+			  	<img class='icon' src='images/bridge.png' title='Bridges' alt='Bridges'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_15' type='checkbox'  data-bind='click: toggleBox($root.lighthouseChecked), checked: $root.lighthouseChecked'/>
+				  	<label for='rounded_15'></label>
+				</div>
+			  	<img class='icon' src='images/lighthouse.png' title='Lighthouses' alt='Lighthouses'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_16' type='checkbox'  data-bind='click: toggleBox($root.shoppingChecked), checked: $root.shoppingChecked'/>
+				  	<label for='rounded_16'></label>
+				</div>
+			  	<img class='icon' src='images/shopping.png' title='Shopping areas, shopping centres, etc.' alt='Shopping areas, shopping centres, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_17' type='checkbox'  data-bind='click: toggleBox($root.theatreChecked), checked: $root.theatreChecked'/>
+				  	<label for='rounded_17'></label>
+				</div>
+			  	<img class='icon' src='images/theatre.png' title='Theatres, operas, cinemas, etc.' alt='Theatres, operas, cinemas, etc.'>
+
+			  	<div class="rounded">
+				  	<input id='rounded_18' type='checkbox'  data-bind='click: toggleBox($root.trainChecked), checked: $root.trainChecked'/>
+				  	<label for='rounded_18'></label>
+				</div>
+			  	<img class='icon' src='images/train.png' title='Train stations' alt='Train stations'>
+
+			</div>
+			<hr>
+
+			<!-- Section with the results list -->
+			<h4 data-bind='text: $root.search().length != 1 ? $root.search().length + " results:" : $root.search().length + " result:", visible: visibleSideNav'></h4>
+			<ul class='results' data-bind='foreach: search, visible: visibleSideNav'>
+				<li data-bind='click: $root.clickItem'>
+					<img class='icon' data-bind='attr: { src: "images/" + type + ".png" }'>
+					<span class='place' data-bind='attr: { title: alt_names.length > 0 ? name + "\n(" + (alt_names.join()).replace(/\,/g, " \/ ") + ")" : name }, text: name'></span>
+				</li>
+			</ul>
+		</aside>
+
+		<header class='row'>
+			<nav class='col-xs-2'>
+				<span title='Open search pannel' onclick='openNav()'>&#9776;</span>
+			</nav>
+			<div class='col-xs-4 porto_header_text'>
+				<span>Porto</span>
+			</div>
+			<div class='col-xs-5 porto_header_img'>
+				<img class='img-responsive' src='images/Skyline.jpg' alt='Porto skyline'>
+			</div>
+		</header>
+
+		<div class='error_message' data-bind='visible: mapLoading'>Loading...</div>
+		<button class='btn map_button' onclick='resetMap();'>Reset map</button>
+		<section class='row' id='map'>
+		</section>
+
+		<footer class='row'>
+			<span>Miguel Pinto, 2017</span>
+		</footer>
+	</main>
+   
+
+	<!-- Js -->
+    	<script src='https://code.jquery.com/jquery-latest.min.js' type='text/javascript'></script>
+    	<script src='js/bootstrap.js' type='text/javascript'></script>
+		<script src='js/knockout-3.4.2.js' type='text/javascript'></script>
+		<script src="js/app.js" type='text/javascript'></script>
+		<script async defer
+			src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCUFdbxy5O_WZ2btskgVBORQCQn5Og4e0Q&v=3&callback=init' onerror='mapLoadingError();'>
+		</script>
+</body>
+</html>
