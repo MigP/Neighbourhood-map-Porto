@@ -8,8 +8,8 @@
 	    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Neighbourhood map - Porto</title>
     <!-- Styles -->
-    	<link href='css/bootstrap.min.css' rel='stylesheet'>
-    	<link href='css/basic.min.css' rel='stylesheet'>
+    	<link href='css/bootstrap.css' rel='stylesheet'>
+    	<link href='css/basic.css' rel='stylesheet'>
 
 		<style type='text/css'>
 		</style>
@@ -19,20 +19,20 @@
 
 		<!-- Side navigation panel -->
 		<aside id='sideNav' class='sideNav' data-bind='visible: visibleSideNav'>
-			<span title='Close search pannel' class='closebtn' onclick='closeNav()'>&times;</span>
+			<span title='Close search pannel - (Alt+C)' class='closebtn' onclick='closeNav()'>&times;</span>
 			<h2>Search Porto</h2>
 			<input id='search_input_box' class='search-box' placeholder='Search ..' type='text' data-bind='value: searchBox, valueUpdate: "keyup"' autofocus>
-			<span class='clear' data-bind='click: clearSearch'>Clear search</span>
+			<span title = 'Clear cearch - (Alt+S)' class='clear' data-bind='click: clearSearch'>Clear search</span>
 			<h4 class='filter_heading'>
 				<span>Filter by type</span>
-				<span id='arrow' data-bind='click: toggleFilters, text: !hiddenFilters() ? "▼" : "▲", attr: { title: !hiddenFilters() ? "Collapse" : "Expand" }'></span>
+				<span id='arrow' data-bind='click: toggleFilters, text: !hiddenFilters() ? "▼" : "▲", attr: { title: !hiddenFilters() ? "Collapse - (Alt+T)" : "Expand - (Alt+T)" }'></span>
 			</h4>
 
 			<!-- Section with all filter checkboxes -->
 			<div class='types' data-bind='css: { "types_hidden": hiddenFilters }, visible: visibleSideNav'>
 				<div class='filter_all'>
-					<button class='btn' data-bind='click: checkAllFilters'>All filters</button>
-					<button class='btn' data-bind='click: uncheckAllFilters'>No filters</button>
+					<button title = 'Select all filters - (Alt+A)' class='btn' data-bind='click: checkAllFilters'>All filters</button>
+					<button title = 'Deselect all filters - (Alt+N)' class='btn' data-bind='click: uncheckAllFilters'>No filters</button>
 				</div>
 
 			  	<div class="rounded">
@@ -135,7 +135,7 @@
 				  	<input id='rounded_17' type='checkbox'  data-bind='click: toggleBox($root.theatreChecked), checked: $root.theatreChecked'/>
 				  	<label for='rounded_17'></label>
 				</div>
-			  	<img class='icon' src='images/theatre.png' title='Theatres, operas, cinemas, etc.' alt='Theatres, operas, cinemas, etc.'>
+			  	<img class='icon' src='images/theatre.png' title='Theatres, operas, cinemas, music halls, etc.' alt='Theatres, operas, cinemas, music halls, etc.'>
 
 			  	<div class="rounded">
 				  	<input id='rounded_18' type='checkbox'  data-bind='click: toggleBox($root.trainChecked), checked: $root.trainChecked'/>
@@ -158,7 +158,7 @@
 
 		<header class='row'>
 			<nav class='col-xs-2'>
-				<span title='Open search pannel' onclick='openNav()'>&#9776;</span>
+				<span title='Open search pannel - (Alt+O)' onclick='openNav()'>&#9776;</span>
 			</nav>
 			<div class='col-xs-4 porto_header_text'>
 				<span>Porto</span>
@@ -169,7 +169,7 @@
 		</header>
 
 		<div class='error_message' data-bind='visible: mapLoading'>Loading...</div>
-		<button class='btn map_button' onclick='resetMap();'>Reset map</button>
+		<button title = 'Resets map zoom and center - (Alt+R)' class='btn map_button' onclick='resetMap()'>Reset map</button>
 		<section class='row' id='map'>
 		</section>
 
@@ -181,11 +181,12 @@
 
 	<!-- Js -->
     	<script src='https://code.jquery.com/jquery-latest.min.js' type='text/javascript'></script>
-    	<script src='js/bootstrap.min.js' type='text/javascript'></script>
-	<script src='js/knockout-3.4.2.min.js' type='text/javascript'></script>
-	<script src="js/app.min.js" type='text/javascript'></script>
-	<script async defer
-		src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCUFdbxy5O_WZ2btskgVBORQCQn5Og4e0Q&v=3&callback=init' onerror='mapLoadingError();'>
-	</script>
+    	<script src='js/bootstrap.js' type='text/javascript'></script>
+		<script src='js/knockout-3.4.2.js' type='text/javascript'></script>
+		<script src="js/placesViewModel.js" type='text/javascript'></script>
+		<script src="js/app.js" type='text/javascript'></script>
+		<script async defer
+			src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCUFdbxy5O_WZ2btskgVBORQCQn5Og4e0Q&v=3&callback=init' onerror='mapLoadingError();'>
+		</script>
 </body>
 </html>
