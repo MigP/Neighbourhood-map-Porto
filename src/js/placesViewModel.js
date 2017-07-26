@@ -1103,13 +1103,21 @@
 		theatreChecked: ko.observable(false),
 		trainChecked: ko.observable(false),
 	    searchBox: ko.observable(''),
+		focusMarker: function(markerToFocus) { // Makes the marker bounce and calls the getFlickr function
+	        markerToFocus.marker.setAnimation(google.maps.Animation.BOUNCE);
+        	getFlickrAndFoursquare(markerToFocus);
+		},
+		blurMarker: function(markerToBlur) { // Stops the marker's animatoin and clears infowindow
+	        markerToBlur.marker.setAnimation(null);
+        	infowindow.setContent(null);
+	    },
 	    clickItem: function() { // Triggered when a list item is clicked. Deselects the current selected item, if any, and selects the one clicked on
 	    	self = this;
 
 	    	if(selectedMarker) {
-	    		selectedMarker.blur();
+	    		placesViewModel.blurMarker(selectedMarker);
 	    	}
-	        self.focus();
+	        placesViewModel.focusMarker(self);
 	        selectedMarker = self;
 	        closeNav();
 	    },
