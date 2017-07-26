@@ -139,7 +139,7 @@
 			var makeFoursquareRequest2 = function(options3, callback3) { // Second Foursquare request - gets the information on the most relevant place
 				var url3, request3, item3, first3;
 
-				url3 = "https://api.foursquare.com/v2/venuesa/" + options3.venueId + "/";
+				url3 = "https://api.foursquare.com/v2/venues/" + options3.venueId + "/";
 				first3 = true;
 
 				for (item3 in options3) { // Iterates through all the options to include on the request
