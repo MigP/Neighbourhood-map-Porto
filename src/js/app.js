@@ -21,8 +21,15 @@
 	function getFlickrAndFoursquare(place) {
 		var photo_str = [],
 			html_title = "<h5>"+place.marker.title+"</h5>",
-			flickr_error = flickr_str = foursquare_error = foursquare_desc = foursquare_url = foursquare_rating = foursquare_ratingSignals = foursquare_contact = foursquare_location = "";
-
+			flickr_error = "";
+			flickr_str = "";
+			foursquare_error = "";
+			foursquare_desc = "";
+			foursquare_url = "";
+			foursquare_rating = "";
+			foursquare_ratingSignals = "";
+			foursquare_contact = "";
+			foursquare_location = "";
 
 		var makeFlickrRequest = function(options, callback) { // Flickr request
 			var url, request, item, first;
@@ -39,7 +46,7 @@
 
 			request = new XMLHttpRequest();
 			request.onload = function() {
-				callback(this.response)
+				callback(this.response);
 			};
 			request.open('get', url, true);
 			request.onreadystatechange = function(event) {
@@ -80,7 +87,7 @@
 		    	flickr_str += "<a href='" + photo_str[i].link + "' target='_blank'><img class='flickr_pic img-responsive' src='" + photo_str[i].src + "' alt='" + photo_str[i].title +"' title='" + photo_str[i].title + "'></a>";
 		    }
 
-		    if (jsonData.photos.photo.length == 0) {
+		    if (jsonData.photos.photo.length === 0) {
 		    	flickr_str += "<span>Sorry, no photos of " + place.name + " were found on Flickr.</span>";
 		    }
 
@@ -100,7 +107,7 @@
 
 				request2 = new XMLHttpRequest();
 				request2.onload = function() {
-					callback2(this.response)
+					callback2(this.response);
 				};
 				request2.open('get', url2, true);
 				request2.onreadystatechange = function(event) {
@@ -136,7 +143,7 @@
 
 				request3 = new XMLHttpRequest();
 				request3.onload = function() {
-					callback3(this.response)
+					callback3(this.response);
 				};
 				request3.open('get', url3, true);
 				request3.onreadystatechange = function(event) {
@@ -171,7 +178,7 @@
 			makeFoursquareRequest(options2, function(data) { // Makes the actual first request to Foursquare
 				var jsonData = JSON.parse(data);
 
-				if (jsonData.response.venues.length != 0) {
+				if (jsonData.response.venues.length !== 0) {
 					var options3 = { // Options for the second Foursquare request
 					  "client_id": "MU0EVKMOPGNQTNJ1YUDKIEAF0FBEFNX1I0QQWKJR3U0D2B13",
 					  "client_secret": "RKEWTTPR0WFRRICPBJHZ4D01X0QIK541EMP44JVTJHYFUUBC",
@@ -210,8 +217,8 @@
 						    }
 
 				            var html_str = html_title;
-				            if (foursquare_error == "") {
-				            	if (foursquare_desc + foursquare_rating + foursquare_ratingSignals + foursquare_url + foursquare_contact + foursquare_location == "") {
+				            if (foursquare_error === "") {
+				            	if (foursquare_desc + foursquare_rating + foursquare_ratingSignals + foursquare_url + foursquare_contact + foursquare_location === "") {
 				            		html_str += "<div id='info'>Sorry, no information about " + place.name + " was found on Foursquare.</div>";
 				            	} else {
 				            		html_str += "<div id='info'><em><a href = '" + jsonData2.response.venue.canonicalUrl + "' target = '_blank'>Info by Foursquare</a></em></br>" + foursquare_desc + "<div id='rating_data'>" + foursquare_rating + foursquare_ratingSignals + "</div>" + foursquare_url + foursquare_contact + foursquare_location + "</div>";
@@ -219,7 +226,7 @@
 				            } else {
 				            	html_str += "<div id='info'>" + foursquare_error + "</div>";
 				            }
-				        	if (flickr_error == "") {
+				        	if (flickr_error === "") {
 				            	html_str += "</br><em><a href = 'https://www.flickr.com/search?text='" + place.marker.title + "'&structured=yes' target = '_blank'>Photos by Flickr</a></em></br><div id='photos'>" + flickr_str + "</div>";
 				            } else {
 				            	html_str += "<div id='photos'>" + flickr_error + "</div>";
@@ -234,7 +241,7 @@
 			            var html_str = html_title;
 			            html_str += "<div id='info'>Sorry, no information about " + place.name + " was found on Foursquare.</div>";
 
-			        	if (flickr_error == "") {
+			        	if (flickr_error === "") {
 			            	html_str += "</br><em><a href = 'https://www.flickr.com/search?text='" + place.marker.title + "'&structured=yes' target = '_blank'>Photos by Flickr</a></em></br><div id='photos'>" + flickr_str + "</div>";
 			            } else {
 			            	html_str += "<div id='photos'>" + flickr_error + "</div>";
@@ -308,6 +315,18 @@
 	    bounds = new google.maps.LatLngBounds();
 	    infowindow = new google.maps.InfoWindow();
 
+		function addClickListener(placeToAddListenerTo) { // Adds a click listener to each marker which toggles selections
+			return function() {
+		    	if(selectedMarker) {
+		    		placesViewModel.blurMarker(selectedMarker);
+		    	}
+		        placesViewModel.focusMarker(placeToAddListenerTo);
+		        selectedMarker = placeToAddListenerTo;
+		        closeNav();
+		    };
+
+		}
+
 		for (var i = 0; i < placesViewModel.places.length; i++) { // Creates the markers and adds them to the placesViewModel
 			var iteratedPlace = placesViewModel.places[i];
 
@@ -324,31 +343,13 @@
 		        title: iteratedPlace.name
 		    });
 
-			iteratedPlace.marker.addListener('click', (function(placeToAddListenerTo) { // Adds a click listener to each marker which toggles selections
-				return function() {
-			    	if(selectedMarker) {
-			    		selectedMarker.blur();
-			    	}
-			        placeToAddListenerTo.focus();
-			        selectedMarker = placeToAddListenerTo;
-			        closeNav();
-			    };
+			iteratedPlace.marker.addListener('click', (addClickListener(iteratedPlace)));
 
-			})(iteratedPlace));
-
-			iteratedPlace.focus = function() { // Makes the marker bounce and calls the getFlickr function
-		        this.marker.setAnimation(google.maps.Animation.BOUNCE);
-	        	getFlickrAndFoursquare(this);
-		    };
-			iteratedPlace.blur = function() { // Stops the marker's animatoin and clears infowindow
-		        this.marker.setAnimation(null);
-	        	infowindow.setContent(null);
-		    };
 			bounds.extend(iteratedPlace.marker.position); // Extends the map bounds to include each newly created marker
 		}
 
 		google.maps.event.addListener(infowindow, 'closeclick',function(){ // Adds a closeclick listener to the infowindow which deselects the selected marker
-    		selectedMarker.blur();
+    		placesViewModel.blurMarker(selectedMarker);
 	        selectedMarker = null;
 		});
 
