@@ -1081,22 +1081,6 @@
 						"lng": -8.640267}
 				}
 		],
-
-				/*
-
-				},{
-					"name": "NOME",
-					"alt_names": [
-						"NOME"
-					],
-					"tags": ", Porto",
-					"type": "NOME",
-					"location": {
-						"lat": 0000,
-						"lng": 0000}
-				}
-
-				*/
 		hiddenFilters: ko.observable(true),
 		visibleSideNav: ko.observable(false),
 		mapLoading: ko.observable(true),
