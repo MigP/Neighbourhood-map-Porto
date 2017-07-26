@@ -1082,6 +1082,8 @@
 				}
 		],
 		hiddenFilters: ko.observable(true),
+		hide_sideNav: ko.observable(false),
+		searchBox_focus: ko.observable(true),
 		visibleSideNav: ko.observable(false),
 		mapLoading: ko.observable(true),
 		architecturalChecked: ko.observable(false),
