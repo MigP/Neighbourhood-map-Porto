@@ -16,7 +16,7 @@
 
 		<!-- Side navigation panel -->
 		<aside id='sideNav' class='sideNav' data-bind='visible: visibleSideNav, css: { "sideNav_hidden": hide_sideNav }'>
-			<span title='Close search pannel - (Alt+C)' class='closebtn' data-bind='click: $root.closeNav'>&times;</span>
+			<span title='Close search pannel - (Alt+C)' class='closebtn' data-bind='click: closeNav'>&times;</span>
 			<h2>Search Porto</h2>
 			<input id='search_input_box' class='search-box' placeholder='Search ..' type='text' data-bind='value: searchBox, valueUpdate: "keyup", hasfocus: searchBox_focus' autofocus>
 			<span title = 'Clear cearch - (Alt+S)' class='clear' data-bind='click: clearSearch'>Clear search</span>
