@@ -2,15 +2,6 @@
 // Global variables
 	var	map, bounds, infoWindow, selectedMarker = null, originalZoom, originalCenter;
 
-// Side navigation panel
-	function openNav() {
-		placesViewModel.hide_sideNav(false);
-	}
-
-	function closeNav() {
-		placesViewModel.hide_sideNav(true);
-	}
-
 // Resets the map view
 	function resetMap() {
 	    map.setCenter(originalCenter);
@@ -187,82 +178,99 @@
 			};
 
 			makeFoursquareRequest(options2, function(data) { // Makes the actual first request to Foursquare
-				var jsonData = JSON.parse(data);
-				if (typeof JSON.parse(data).response.length !== "undefined" && (typeof jsonData.response.venues !== "undefined" || jsonData.response.venues.length !== 0)) {
-					var options3 = { // Options for the second Foursquare request
-					  "client_id": "MU0EVKMOPGNQTNJ1YUDKIEAF0FBEFNX1I0QQWKJR3U0D2B13",
-					  "client_secret": "RKEWTTPR0WFRRICPBJHZ4D01X0QIK541EMP44JVTJHYFUUBC",
-					  "venueId": jsonData.response.venues[0].id,
-					  "v": "20170723"
-					};
-
-					makeFoursquareRequest2(options3, function(data) { // Makes the actual second request to Foursquare
-						if (data) {
-							var jsonData2 = JSON.parse(data);
-							// Organises the content to be displayed in the infowindow and displays it
-							    if (typeof jsonData2.response.venue.description != "undefined") {
-							    	foursquare_desc = "<div>" + jsonData2.response.venue.description + "</div>";
-							    }
-
-							    if (typeof jsonData2.response.venue.url != "undefined") {
-							    	foursquare_url = "<span><a href='" + jsonData2.response.venue.url + "?ref=" + options3.client_id + "' target='_blank'>" + jsonData2.response.venue.url + "</a></span>";
-							    }
-
-							    if (typeof jsonData2.response.venue.rating != "undefined") {
-							    	foursquare_rating = "<span class='venueScore' title='" + (jsonData2.response.venue.rating).toFixed(1) + "/10 - People like this place' style='background-color: #" + jsonData2.response.venue.ratingColor + ";'><span class='ratingValue'>" + (jsonData2.response.venue.rating).toFixed(1) + "</span><sup>/<span class='bestRating'>10</span></sup></span>";
-							    }
-
-							    if (typeof jsonData2.response.venue.ratingSignals != "undefined") {
-							    	foursquare_ratingSignals = "<div class='numRatingsBlock'><div class='numRatings' id='ratingCount'>" + jsonData2.response.venue.ratingSignals + "</div><div class='numRatingsLabel'>ratings</div></div>";
-							    }
-
-							    if (typeof jsonData2.response.venue.contact.formattedPhone != "undefined") {
-							    	foursquare_contact = "<span>Contact: " + jsonData2.response.venue.contact.formattedPhone + "</span>";
-							    }
-
-							    if (typeof jsonData2.response.venue.location.formattedAddress != "undefined") {
-							    	foursquare_location += "<span>Address: \n</span>";
-							    	for (var i = 0; i < jsonData2.response.venue.location.formattedAddress.length; i++) {
-							    		foursquare_location += "<span>" + jsonData2.response.venue.location.formattedAddress[i] + "</span>";
-							    	}
-							    }
-
-					            var html_str = html_title;
-					            if (foursquare_error === "") {
-					            	if (foursquare_desc + foursquare_rating + foursquare_ratingSignals + foursquare_url + foursquare_contact + foursquare_location === "") {
-					            		html_str += "<div id='info'>Sorry, no information about " + place.name + " was found on Foursquare.</div>";
-					            	} else {
-					            		html_str += "<div id='info'><em><a href = '" + jsonData2.response.venue.canonicalUrl + "' target = '_blank'>Info by Foursquare</a></em></br>" + foursquare_desc + "<div id='rating_data'>" + foursquare_rating + foursquare_ratingSignals + "</div>" + foursquare_url + foursquare_contact + foursquare_location + "</div>";
-					            	}
-					            } else {
-					            	html_str += "<div id='info'>" + foursquare_error + "</div>";
-					            }
-					        	if (flickr_error === "") {
-					            	html_str += "</br><em><a href = 'https://www.flickr.com/search?text='" + place.marker.title + "'&structured=yes' target = '_blank'>Photos by Flickr</a></em></br><div id='photos'>" + flickr_str + "</div>";
-					            } else {
-					            	html_str += "<div id='photos'>" + flickr_error + "</div>";
-					            }
-
-								infowindow.setContent("<div id='info_window'>" + html_str + "</div>");
-								map.setCenter(place.marker.getPosition());
-								infowindow.open(map,place.marker);
-						}
-					});
-
-				} else {
+				function noFoursquareData(passedPlace) {
 					// Organises the content to be displayed in the infowindow when there is no information on Foursquare, and displays it
 			            var html_str = html_title;
-			            html_str += "<div id='info'>Sorry, no information about " + place.name + " was found on Foursquare.</div>";
+			            html_str += "<div id='info'>Sorry, no information about " + passedPlace.name + " was found on Foursquare.</div>";
 
 			        	if (flickr_error === "") {
-			            	html_str += "</br><em><a href = 'https://www.flickr.com/search?text='" + place.marker.title + "'&structured=yes' target = '_blank'>Photos by Flickr</a></em></br><div id='photos'>" + flickr_str + "</div>";
+			            	html_str += "</br><em><a href = 'https://www.flickr.com/search?text='" + passedPlace.marker.title + "'&structured=yes' target = '_blank'>Photos by Flickr</a></em></br><div id='photos'>" + flickr_str + "</div>";
 			            } else {
 			            	html_str += "<div id='photos'>" + flickr_error + "</div>";
 			            }
 
 						infowindow.setContent("<div id='info_window'>" + html_str + "</div>");
-						map.setCenter(place.marker.getPosition());
-						infowindow.open(map,place.marker);
+						map.setCenter(passedPlace.marker.getPosition());
+						infowindow.open(map,passedPlace.marker);
+				}
+
+				if (data) {
+					var jsonData = JSON.parse(data);
+					if (typeof jsonData.response.venues !== "undefined") {
+						if (jsonData.response.venues.length !== 0) {
+							var options3 = { // Options for the second Foursquare request
+							  "client_id": "MU0EVKMOPGNQTNJ1YUDKIEAF0FBEFNX1I0QQWKJR3U0D2B13",
+							  "client_secret": "RKEWTTPR0WFRRICPBJHZ4D01X0QIK541EMP44JVTJHYFUUBC",
+							  "venueId": jsonData.response.venues[0].id,
+							  "v": "20170723"
+							};
+
+							makeFoursquareRequest2(options3, function(data) { // Makes the actual second request to Foursquare
+								if (data) {
+									var jsonData2 = JSON.parse(data);
+									if (typeof jsonData2.response.venue !== "undefined") {
+										// Organises the content to be displayed in the infowindow and displays it
+										    if (typeof jsonData2.response.venue.description != "undefined") {
+										    	foursquare_desc = "<div>" + jsonData2.response.venue.description + "</div>";
+										    }
+
+										    if (typeof jsonData2.response.venue.url != "undefined") {
+										    	foursquare_url = "<span><a href='" + jsonData2.response.venue.url + "?ref=" + options3.client_id + "' target='_blank'>" + jsonData2.response.venue.url + "</a></span>";
+										    }
+
+										    if (typeof jsonData2.response.venue.rating != "undefined") {
+										    	foursquare_rating = "<span class='venueScore' title='" + (jsonData2.response.venue.rating).toFixed(1) + "/10 - People like this place' style='background-color: #" + jsonData2.response.venue.ratingColor + ";'><span class='ratingValue'>" + (jsonData2.response.venue.rating).toFixed(1) + "</span><sup>/<span class='bestRating'>10</span></sup></span>";
+										    }
+
+										    if (typeof jsonData2.response.venue.ratingSignals != "undefined") {
+										    	foursquare_ratingSignals = "<div class='numRatingsBlock'><div class='numRatings' id='ratingCount'>" + jsonData2.response.venue.ratingSignals + "</div><div class='numRatingsLabel'>ratings</div></div>";
+										    }
+
+										    if (typeof jsonData2.response.venue.contact.formattedPhone != "undefined") {
+										    	foursquare_contact = "<span>Contact: " + jsonData2.response.venue.contact.formattedPhone + "</span>";
+										    }
+
+										    if (typeof jsonData2.response.venue.location.formattedAddress != "undefined") {
+										    	foursquare_location += "<span>Address: \n</span>";
+										    	for (var i = 0; i < jsonData2.response.venue.location.formattedAddress.length; i++) {
+										    		foursquare_location += "<span>" + jsonData2.response.venue.location.formattedAddress[i] + "</span>";
+										    	}
+										    }
+
+								            var html_str = html_title;
+								            if (foursquare_error === "") {
+								            	if (foursquare_desc + foursquare_rating + foursquare_ratingSignals + foursquare_url + foursquare_contact + foursquare_location === "") {
+								            		html_str += "<div id='info'>Sorry, no information about " + place.name + " was found on Foursquare.</div>";
+								            	} else {
+								            		html_str += "<div id='info'><em><a href = '" + jsonData2.response.venue.canonicalUrl + "' target = '_blank'>Info by Foursquare</a></em></br>" + foursquare_desc + "<div id='rating_data'>" + foursquare_rating + foursquare_ratingSignals + "</div>" + foursquare_url + foursquare_contact + foursquare_location + "</div>";
+								            	}
+								            } else {
+								            	html_str += "<div id='info'>" + foursquare_error + "</div>";
+								            }
+								        	if (flickr_error === "") {
+								            	html_str += "</br><em><a href = 'https://www.flickr.com/search?text='" + place.marker.title + "'&structured=yes' target = '_blank'>Photos by Flickr</a></em></br><div id='photos'>" + flickr_str + "</div>";
+								            } else {
+								            	html_str += "<div id='photos'>" + flickr_error + "</div>";
+								            }
+
+											infowindow.setContent("<div id='info_window'>" + html_str + "</div>");
+											map.setCenter(place.marker.getPosition());
+											infowindow.open(map,place.marker);
+									} else {
+										noFoursquareData(place);
+									}
+								} else {
+									noFoursquareData(place);
+								}
+							});
+						} else {
+							noFoursquareData(place);
+						}
+					} else {
+						noFoursquareData(place);
+					}
+				} else {
+					noFoursquareData(place);
 				}
 			});
 		});
@@ -335,7 +343,7 @@
 		    	}
 		        placesViewModel.focusMarker(placeToAddListenerTo);
 		        selectedMarker = placeToAddListenerTo;
-		        closeNav();
+		        placesViewModel.closeNav;
 		    };
 
 		}
@@ -388,11 +396,11 @@
 		    if (ev.altKey  &&  ev.code === "KeyA") { // Ctrl + a -- Selects all filters
 		        placesViewModel.checkAllFilters();
 		    } else if (ev.altKey  &&  ev.code === "KeyC") { // Alt + c -- Closes side navigation panel
-		        closeNav();
+		        placesViewModel.closeNav();
 		    } else if (ev.altKey  &&  ev.code === "KeyN") { // Alt + n -- Deselects all finters
 		        placesViewModel.uncheckAllFilters();
 		    } else if (ev.altKey  &&  ev.code === "KeyO") { // Alt + o -- Opens side navigation panel
-		        openNav();
+		        placesViewModel.openNav();
 		    } else if (ev.altKey  &&  ev.code === "KeyR") { // Alt + r -- Resets map zoom and center
 		        resetMap();
 		    } else if (ev.altKey  &&  ev.code === "KeyS") { // Alt + s -- Clears search box
