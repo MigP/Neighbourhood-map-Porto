@@ -1121,11 +1121,17 @@
 	    	}
 	        placesViewModel.focusMarker(self);
 	        selectedMarker = self;
-	        closeNav();
+	        placesViewModel.closeNav();
 	    },
 	    toggleBox: function(item) { // Toggles the boolean corresponding to the checked or unchecked box
 	    	item(!item());
-	    }
+	    },
+		openNav: function() {
+			placesViewModel.hide_sideNav(false);
+		},
+		closeNav: function() {
+			placesViewModel.hide_sideNav(true);
+		}
 	};
 
     placesViewModel.removeDiacritics = function(str) { // Returns string without diacritics
