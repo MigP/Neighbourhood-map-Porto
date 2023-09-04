@@ -1,9 +1,0 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.example.bodpal",
-    "sha256_cert_fingerprints":
-    ["DC:38:96:74:D1:C8:0D:6B:8F:03:60:77:D0:6E:E3:9B:BB:84:00:7D:55:AE:20:F2:82:B3:10:7E:73:F0:BF:32"]
-  }
-}]
